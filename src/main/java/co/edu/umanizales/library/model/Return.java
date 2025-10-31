@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Return {
-    private Long id;
+    private long id;
     private Loan loan;
     private LocalDateTime returnDate;
-    private String condition; // GOOD, DAMAGED, LOST
+    private BookCondition condition;
     private String notes;
     private double fineAmount;
     private boolean finePaid;

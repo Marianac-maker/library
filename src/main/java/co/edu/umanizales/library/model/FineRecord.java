@@ -9,11 +9,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FineRecord {
-    private Long id;
+    private long id;
     private User user;
     private Loan loan;
     private double amount;
-    private String reason; // LATE_RETURN, DAMAGE, LOSS
+    private FineReason reason;
     private LocalDate issueDate;
     private LocalDate dueDate;
     private boolean paid;

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Loan {
-    private Long id;
+    private long id;
     private User user;
     private Book book;
     private LocalDate loanDate;

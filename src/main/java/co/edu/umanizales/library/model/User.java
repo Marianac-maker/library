@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class User extends Person {
     private String username;
     private String password;
-    private String role; // ADMIN, LIBRARIAN, MEMBER
+    private UserRole role;
     private boolean active;
 }
