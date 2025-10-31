@@ -1,0 +1,2 @@
+id,name,email,phoneNumber,username,password,role,active
+1,Mariana Valencia Cotrini,marianavalencia260207@gmail.com,123456789,jdoe,secret,MEMBER,true
