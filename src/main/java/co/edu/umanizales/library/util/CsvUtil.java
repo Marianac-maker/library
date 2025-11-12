@@ -1,11 +1,13 @@
 package co.edu.umanizales.library.util;
 
 import co.edu.umanizales.library.model.User;
+import co.edu.umanizales.library.model.Review;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,5 +94,71 @@ public class CsvUtil {
             return "\"" + value.replace("\"", "\"\"") + "\"";
         }
         return value;
+    }
+
+    private static final String REVIEWS_CSV_HEADER = "id,userId,bookId,rating,comment,reviewDate";
+
+    public static List<Review> readReviewsFromCsv(String filePath) throws IOException {
+        List<Review> reviews = new ArrayList<>();
+
+        if (!Files.exists(Paths.get(filePath))) {
+            log.warn("CSV file not found: {}", filePath);
+            return reviews;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            boolean isFirstLine = true;
+
+            while ((line = reader.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue; // Skip header
+                }
+
+                String[] fields = line.split(",");
+                if (fields.length >= 6) {
+                    try {
+                        Review review = new Review();
+                        review.setId(Long.parseLong(fields[0]));
+                        review.setRating(Integer.parseInt(fields[2]));
+                        review.setComment(fields[3]);
+                        review.setReviewDate(LocalDate.parse(fields[4]));
+                        reviews.add(review);
+                    } catch (NumberFormatException e) {
+                        log.error("Error parsing review line: {}", line, e);
+                    }
+                }
+            }
+        }
+
+        log.info("Loaded {} reviews from CSV", reviews.size());
+        return reviews;
+    }
+
+    public static void writeReviewsToCsv(String filePath, List<Review> reviews) throws IOException {
+        // Create directory if it doesn't exist
+        Files.createDirectories(Paths.get(filePath).getParent());
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            // Write header
+            writer.write(REVIEWS_CSV_HEADER);
+            writer.newLine();
+
+            // Write review data
+            for (Review review : reviews) {
+                String line = String.format("%d,%d,%d,%d,%s,%s",
+                        review.getId(),
+                        review.getUser() != null ? review.getUser().getId() : "",
+                        review.getBook() != null ? review.getBook().getId() : "",
+                        review.getRating(),
+                        escapeCsv(review.getComment()),
+                        review.getReviewDate());
+                writer.write(line);
+                writer.newLine();
+            }
+        }
+
+        log.info("Wrote {} reviews to CSV", reviews.size());
     }
 }
