@@ -27,9 +27,11 @@ public class LoanController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Loan> getLoanById(@PathVariable long id) {
-        return loanService.getLoanById(id)
-                .map(loan -> new ResponseEntity<>(loan, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Loan loan = loanService.getLoanById(id);
+        if (loan != null) {
+            return new ResponseEntity<>(loan, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping

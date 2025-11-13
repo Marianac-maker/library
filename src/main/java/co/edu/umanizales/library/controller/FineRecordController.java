@@ -27,9 +27,11 @@ public class FineRecordController {
 
     @GetMapping("/{id}")
     public ResponseEntity<FineRecord> getFineRecordById(@PathVariable long id) {
-        return fineRecordService.getFineRecordById(id)
-                .map(record -> new ResponseEntity<>(record, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        FineRecord record = fineRecordService.getFineRecordById(id);
+        if (record != null) {
+            return new ResponseEntity<>(record, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/user/{userId}")

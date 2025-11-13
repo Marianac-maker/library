@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -30,9 +29,11 @@ public class ReviewController {
     @GetMapping("/{id}")
     public ResponseEntity<Review> getReviewById(@PathVariable Long id) {
         log.info("Fetching review with id: {}", id);
-        Optional<Review> review = reviewService.getReviewById(id);
-        return review.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        Review review = reviewService.getReviewById(id);
+        if (review != null) {
+            return ResponseEntity.ok(review);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
@@ -51,9 +52,11 @@ public class ReviewController {
     public ResponseEntity<Review> updateReview(@PathVariable Long id, @RequestBody Review reviewDetails) {
         try {
             log.info("Updating review with id: {}", id);
-            Optional<Review> updatedReview = reviewService.updateReview(id, reviewDetails);
-            return updatedReview.map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.notFound().build());
+            Review updatedReview = reviewService.updateReview(id, reviewDetails);
+            if (updatedReview != null) {
+                return ResponseEntity.ok(updatedReview);
+            }
+            return ResponseEntity.notFound().build();
         } catch (IOException e) {
             log.error("Error updating review", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

@@ -8,7 +8,6 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @Service
 public class LoanServiceImpl implements LoanService {
@@ -32,25 +31,32 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public Optional<Loan> getLoanById(long id) {
-        return loans.stream()
-                .filter(loan -> loan.getId() == id)
-                .findFirst();
+    public Loan getLoanById(long id) {
+        for (Loan loan : loans) {
+            if (loan.getId() == id) {
+                return loan;
+            }
+        }
+        return null;
     }
 
     @Override
     public Loan createLoan(Loan loan) {
         // Validate book exists and has available copies
-        Book book = bookService.getBookById(loan.getBook().getIsbn())
-                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+        Book book = bookService.getBookByIsbn(loan.getBook().getIsbn());
+        if (book == null) {
+            throw new IllegalArgumentException("Book not found");
+        }
         
         if (book.getAvailableCopies() <= 0) {
             throw new IllegalStateException("No available copies of the book");
         }
 
         // Validate user exists
-        userService.getUserById(loan.getUser().getId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        User user = userService.getUserById(loan.getUser().getId());
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
 
         // Set loan details
         loan.setId(idCounter.getAndIncrement());
@@ -70,40 +76,50 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public Loan updateLoan(long id, Loan updatedLoan) {
-        return getLoanById(id).map(existingLoan -> {
+        Loan existingLoan = getLoanById(id);
+        if (existingLoan != null) {
             // Only allow updating certain fields
-            if (updatedLoan.getReturned() != existingLoan.isReturned()) {
+            if (updatedLoan.isReturned() != existingLoan.isReturned()) {
                 existingLoan.setReturned(updatedLoan.isReturned());
                 existingLoan.setReturnDate(updatedLoan.isReturned() ? LocalDate.now() : null);
-                
+
                 // Update book available copies if loan status changed
-                Book book = existingLoan.getBook();
+                Book b = existingLoan.getBook();
                 if (existingLoan.isReturned()) {
-                    book.setAvailableCopies(book.getAvailableCopies() + 1);
+                    b.setAvailableCopies(b.getAvailableCopies() + 1);
                 } else {
-                    book.setAvailableCopies(Math.max(0, book.getAvailableCopies() - 1));
+                    b.setAvailableCopies(Math.max(0, b.getAvailableCopies() - 1));
                 }
-                bookService.updateBook(book.getIsbn(), book);
+                bookService.updateBook(b.getIsbn(), b);
             }
-            
+
             existingLoan.setDueDate(updatedLoan.getDueDate());
             saveToFile();
             return existingLoan;
-        }).orElse(null);
+        }
+        return null;
     }
 
     @Override
     public boolean deleteLoan(long id) {
-        Optional<Loan> loanOpt = getLoanById(id);
-        if (loanOpt.isPresent()) {
-            Loan loan = loanOpt.get();
+        Loan loan = getLoanById(id);
+        if (loan != null) {
             if (!loan.isReturned()) {
                 // Return the book if loan is deleted before returning
                 Book book = loan.getBook();
                 book.setAvailableCopies(book.getAvailableCopies() + 1);
                 bookService.updateBook(book.getIsbn(), book);
             }
-            boolean removed = loans.removeIf(l -> l.getId() == id);
+            boolean removed = false;
+            Iterator<Loan> it = loans.iterator();
+            while (it.hasNext()) {
+                Loan l = it.next();
+                if (l.getId() == id) {
+                    it.remove();
+                    removed = true;
+                    break;
+                }
+            }
             if (removed) {
                 saveToFile();
             }
@@ -114,35 +130,45 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public boolean returnLoan(long id) {
-        return getLoanById(id).map(loan -> {
+        Loan loan = getLoanById(id);
+        if (loan != null) {
             if (!loan.isReturned()) {
                 loan.setReturned(true);
                 loan.setReturnDate(LocalDate.now());
-                
+
                 // Update book available copies
                 Book book = loan.getBook();
                 book.setAvailableCopies(book.getAvailableCopies() + 1);
                 bookService.updateBook(book.getIsbn(), book);
-                
+
                 saveToFile();
                 return true;
             }
             return false;
-        }).orElse(false);
+        }
+        return false;
     }
 
     @Override
     public List<Loan> getLoansByUserId(long userId) {
-        return loans.stream()
-                .filter(loan -> loan.getUser().getId() == userId)
-                .collect(Collectors.toList());
+        List<Loan> result = new ArrayList<>();
+        for (Loan loan : loans) {
+            if (loan.getUser() != null && loan.getUser().getId() == userId) {
+                result.add(loan);
+            }
+        }
+        return result;
     }
 
     @Override
     public List<Loan> getLoansByBookId(String bookId) {
-        return loans.stream()
-                .filter(loan -> loan.getBook().getIsbn().equals(bookId))
-                .collect(Collectors.toList());
+        List<Loan> result = new ArrayList<>();
+        for (Loan loan : loans) {
+            if (loan.getBook() != null && loan.getBook().getIsbn() != null && loan.getBook().getIsbn().equals(bookId)) {
+                result.add(loan);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -197,12 +223,16 @@ public class LoanServiceImpl implements LoanService {
                         LocalDate returnDate = parts.length > 6 && !parts[6].isEmpty() ? LocalDate.parse(parts[6]) : null;
 
                         // Get user and book from their services
-                        User user = userService.getUserById(userId)
-                                .orElseThrow(() -> new IllegalStateException("User not found: " + userId));
-                        Book book = bookService.getBookById(bookIsbn)
-                                .orElseThrow(() -> new IllegalStateException("Book not found: " + bookIsbn));
+                        User userLoaded = userService.getUserById(userId);
+                        if (userLoaded == null) {
+                            throw new IllegalStateException("User not found: " + userId);
+                        }
+                        Book bookLoaded = bookService.getBookByIsbn(bookIsbn);
+                        if (bookLoaded == null) {
+                            throw new IllegalStateException("Book not found: " + bookIsbn);
+                        }
 
-                        Loan loan = new Loan(id, user, book, loanDate, dueDate, returned, returnDate);
+                        Loan loan = new Loan(id, userLoaded, bookLoaded, loanDate, dueDate, returned, returnDate);
                         loans.add(loan);
 
                         if (id > maxId) {

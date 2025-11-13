@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -30,9 +29,11 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         log.info("Fetching user with id: {}", id);
-        Optional<User> user = userService.getUserById(id);
-        return user.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        User user = userService.getUserById(id);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
@@ -51,9 +52,11 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         try {
             log.info("Updating user with id: {}", id);
-            Optional<User> updatedUser = userService.updateUser(id, userDetails);
-            return updatedUser.map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.notFound().build());
+            User updatedUser = userService.updateUser(id, userDetails);
+            if (updatedUser != null) {
+                return ResponseEntity.ok(updatedUser);
+            }
+            return ResponseEntity.notFound().build();
         } catch (IOException e) {
             log.error("Error updating user", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

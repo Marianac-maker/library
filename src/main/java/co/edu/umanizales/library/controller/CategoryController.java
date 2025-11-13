@@ -28,16 +28,20 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable long id) {
-        return categoryService.getCategoryById(id)
-                .map(category -> new ResponseEntity<>(category, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Category category = categoryService.getCategoryById(id);
+        if (category != null) {
+            return new ResponseEntity<>(category, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<Category> getCategoryByName(@PathVariable String name) {
-        return categoryService.getCategoryByName(name)
-                .map(category -> new ResponseEntity<>(category, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Category category = categoryService.getCategoryByName(name);
+        if (category != null) {
+            return new ResponseEntity<>(category, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping

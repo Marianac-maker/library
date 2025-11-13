@@ -2,11 +2,10 @@ package co.edu.umanizales.library.service;
 
 import co.edu.umanizales.library.model.Book;
 import java.util.List;
-import java.util.Optional;
 
 public interface BookService {
     List<Book> getAllBooks();
-    Optional<Book> getBookByIsbn(String isbn);
+    Book getBookByIsbn(String isbn);
     List<Book> searchBooks(String query);
     Book createBook(Book book);
     Book updateBook(String isbn, Book book);

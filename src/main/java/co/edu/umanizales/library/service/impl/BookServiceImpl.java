@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -36,18 +35,23 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> getBookByIsbn(String isbn) {
-        return Optional.ofNullable(bookMap.get(isbn));
+    public Book getBookByIsbn(String isbn) {
+        return bookMap.get(isbn);
     }
 
     @Override
     public List<Book> searchBooks(String query) {
         String lowerQuery = query.toLowerCase();
-        return bookMap.values().stream()
-                .filter(book -> book.getTitle().toLowerCase().contains(lowerQuery) ||
-                        book.getIsbn().toLowerCase().contains(lowerQuery) ||
-                        book.getDescription().toLowerCase().contains(lowerQuery))
-                .collect(Collectors.toList());
+        List<Book> result = new ArrayList<>();
+        for (Book book : bookMap.values()) {
+            String title = book.getTitle() != null ? book.getTitle().toLowerCase() : "";
+            String isbn = book.getIsbn() != null ? book.getIsbn().toLowerCase() : "";
+            String desc = book.getDescription() != null ? book.getDescription().toLowerCase() : "";
+            if (title.contains(lowerQuery) || isbn.contains(lowerQuery) || desc.contains(lowerQuery)) {
+                result.add(book);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -111,7 +115,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public boolean increaseAvailableCopies(String isbn, int count) {
-        return getBookByIsbn(isbn).map(book -> {
+        Book book = getBookByIsbn(isbn);
+        if (book != null) {
             int newAvailable = book.getAvailableCopies() + count;
             if (newAvailable > book.getTotalCopies()) {
                 book.setAvailableCopies(book.getTotalCopies());
@@ -120,12 +125,14 @@ public class BookServiceImpl implements BookService {
             }
             saveToFile();
             return true;
-        }).orElse(false);
+        }
+        return false;
     }
 
     @Override
     public boolean decreaseAvailableCopies(String isbn, int count) {
-        return getBookByIsbn(isbn).map(book -> {
+        Book book = getBookByIsbn(isbn);
+        if (book != null) {
             int newAvailable = book.getAvailableCopies() - count;
             if (newAvailable < 0) {
                 return false;
@@ -133,31 +140,47 @@ public class BookServiceImpl implements BookService {
             book.setAvailableCopies(newAvailable);
             saveToFile();
             return true;
-        }).orElse(false);
+        }
+        return false;
     }
 
     @Override
     public List<Book> getBooksByAuthor(long authorId) {
-        return bookMap.values().stream()
-                .filter(book -> book.getAuthors().stream()
-                        .anyMatch(author -> author.getId() == authorId))
-                .collect(Collectors.toList());
+        List<Book> result = new ArrayList<>();
+        for (Book book : bookMap.values()) {
+            List<Author> authors = book.getAuthors();
+            if (authors != null) {
+                for (Author author : authors) {
+                    if (author.getId() == authorId) {
+                        result.add(book);
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     @Override
     public List<Book> getBooksByPublisher(long publisherId) {
-        return bookMap.values().stream()
-                .filter(book -> book.getPublisher() != null && 
-                        book.getPublisher().getId() == publisherId)
-                .collect(Collectors.toList());
+        List<Book> result = new ArrayList<>();
+        for (Book book : bookMap.values()) {
+            if (book.getPublisher() != null && book.getPublisher().getId() == publisherId) {
+                result.add(book);
+            }
+        }
+        return result;
     }
 
     @Override
     public List<Book> getBooksByCategory(long categoryId) {
-        return bookMap.values().stream()
-                .filter(book -> book.getCategory() != null && 
-                        book.getCategory().getId() == categoryId)
-                .collect(Collectors.toList());
+        List<Book> result = new ArrayList<>();
+        for (Book book : bookMap.values()) {
+            if (book.getCategory() != null && book.getCategory().getId() == categoryId) {
+                result.add(book);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -168,9 +191,17 @@ public class BookServiceImpl implements BookService {
             
             // Write data
             for (Book book : bookMap.values()) {
-                String authors = book.getAuthors().stream()
-                        .map(author -> String.valueOf(author.getId()))
-                        .collect(Collectors.joining("|"));
+                StringBuilder authorsBuilder = new StringBuilder();
+                List<Author> authorList = book.getAuthors();
+                if (authorList != null) {
+                    for (int i = 0; i < authorList.size(); i++) {
+                        if (i > 0) {
+                            authorsBuilder.append("|");
+                        }
+                        authorsBuilder.append(authorList.get(i).getId());
+                    }
+                }
+                String authors = authorsBuilder.toString();
                 
                 writer.println(String.format("%s,%s,%s,%d,%d,%d,%d,%d,%d,%s,%s",
                         escapeCsvField(book.getIsbn()),
@@ -219,8 +250,10 @@ public class BookServiceImpl implements BookService {
                         String[] authorIds = parts[2].split("\\|");
                         for (String authorId : authorIds) {
                             if (!authorId.isEmpty()) {
-                                authorService.getAuthorById(Long.parseLong(authorId))
-                                        .ifPresent(authors::add);
+                                Author a = authorService.getAuthorById(Long.parseLong(authorId));
+                                if (a != null) {
+                                    authors.add(a);
+                                }
                             }
                         }
                         
@@ -233,7 +266,7 @@ public class BookServiceImpl implements BookService {
                         
                         // Get category
                         long categoryId = Long.parseLong(parts[6]);
-                        Category category = categoryService.getCategoryById(categoryId).orElse(null);
+                        Category category = categoryService.getCategoryById(categoryId);
                         
                         int availableCopies = Integer.parseInt(parts[7]);
                         int totalCopies = Integer.parseInt(parts[8]);
@@ -258,21 +291,27 @@ public class BookServiceImpl implements BookService {
         // Validate authors exist
         if (book.getAuthors() != null) {
             for (Author author : book.getAuthors()) {
-                authorService.getAuthorById(author.getId())
-                        .orElseThrow(() -> new IllegalArgumentException("Author not found: " + author.getId()));
+                Author a = authorService.getAuthorById(author.getId());
+                if (a == null) {
+                    throw new IllegalArgumentException("Author not found: " + author.getId());
+                }
             }
         }
 
         // Validate publisher exists if provided
         if (book.getPublisher() != null) {
-            publisherService.getPublisherById(book.getPublisher().getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Publisher not found: " + book.getPublisher().getId()));
+            Publisher pub = publisherService.getPublisherById(book.getPublisher().getId());
+            if (pub == null) {
+                throw new IllegalArgumentException("Publisher not found: " + book.getPublisher().getId());
+            }
         }
 
         // Validate category exists if provided
         if (book.getCategory() != null) {
-            categoryService.getCategoryById(book.getCategory().getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Category not found: " + book.getCategory().getId()));
+            Category cat = categoryService.getCategoryById(book.getCategory().getId());
+            if (cat == null) {
+                throw new IllegalArgumentException("Category not found: " + book.getCategory().getId());
+            }
         }
     }
 

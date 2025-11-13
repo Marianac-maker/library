@@ -2,11 +2,10 @@ package co.edu.umanizales.library.service;
 
 import co.edu.umanizales.library.model.Loan;
 import java.util.List;
-import java.util.Optional;
 
 public interface LoanService {
     List<Loan> getAllLoans();
-    Optional<Loan> getLoanById(long id);
+    Loan getLoanById(long id);
     Loan createLoan(Loan loan);
     Loan updateLoan(long id, Loan loan);
     boolean deleteLoan(long id);

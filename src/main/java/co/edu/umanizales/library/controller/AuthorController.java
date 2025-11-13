@@ -27,9 +27,11 @@ public class AuthorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Author> getAuthorById(@PathVariable long id) {
-        return authorService.getAuthorById(id)
-                .map(author -> new ResponseEntity<>(author, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Author author = authorService.getAuthorById(id);
+        if (author != null) {
+            return new ResponseEntity<>(author, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/search")

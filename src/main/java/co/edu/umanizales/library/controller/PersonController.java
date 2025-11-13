@@ -27,9 +27,11 @@ public class PersonController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Person> getPersonById(@PathVariable long id) {
-        return personService.getPersonById(id)
-                .map(person -> new ResponseEntity<>(person, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Person person = personService.getPersonById(id);
+        if (person != null) {
+            return new ResponseEntity<>(person, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping

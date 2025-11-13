@@ -25,15 +25,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<Category> getCategoryById(long id) {
-        return categories.stream()
-                .filter(category -> category.getId() == id)
-                .findFirst();
+    public Category getCategoryById(long id) {
+        for (Category category : categories) {
+            if (category.getId() == id) {
+                return category;
+            }
+        }
+        return null;
     }
 
     @Override
-    public Optional<Category> getCategoryByName(String name) {
-        return Optional.ofNullable(nameIndex.get(name.toLowerCase()));
+    public Category getCategoryByName(String name) {
+        return nameIndex.get(name.toLowerCase());
     }
 
     @Override
@@ -56,38 +59,47 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category updateCategory(long id, Category updatedCategory) {
-        return getCategoryById(id).map(existingCategory -> {
+        Category existingCategory = getCategoryById(id);
+        if (existingCategory != null) {
             // If name is being changed, check for uniqueness
-            if (!existingCategory.getName().equalsIgnoreCase(updatedCategory.getName()) && 
-                nameIndex.containsKey(updatedCategory.getName().toLowerCase())) {
+            if (!existingCategory.getName().equalsIgnoreCase(updatedCategory.getName()) &&
+                    nameIndex.containsKey(updatedCategory.getName().toLowerCase())) {
                 throw new IllegalArgumentException("Another category with this name already exists");
             }
-            
+
             // Remove old name from index if changed
             if (!existingCategory.getName().equalsIgnoreCase(updatedCategory.getName())) {
                 nameIndex.remove(existingCategory.getName().toLowerCase());
                 nameIndex.put(updatedCategory.getName().toLowerCase(), existingCategory);
             }
-            
+
             // Update fields
             existingCategory.setName(updatedCategory.getName());
             existingCategory.setDescription(updatedCategory.getDescription());
-            
+
             saveToFile();
             return existingCategory;
-        }).orElse(null);
+        }
+        return null;
     }
 
     @Override
     public boolean deleteCategory(long id) {
-        return getCategoryById(id).map(category -> {
-            boolean removed = categories.remove(category);
-            if (removed) {
-                nameIndex.remove(category.getName().toLowerCase());
-                saveToFile();
+        boolean removed = false;
+        Iterator<Category> it = categories.iterator();
+        while (it.hasNext()) {
+            Category c = it.next();
+            if (c.getId() == id) {
+                it.remove();
+                removed = true;
+                nameIndex.remove(c.getName().toLowerCase());
+                break;
             }
-            return removed;
-        }).orElse(false);
+        }
+        if (removed) {
+            saveToFile();
+        }
+        return removed;
     }
 
     @Override

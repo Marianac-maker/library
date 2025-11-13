@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -26,18 +25,23 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Optional<Author> getAuthorById(long id) {
-        return Optional.ofNullable(authorMap.get(id));
+    public Author getAuthorById(long id) {
+        return authorMap.get(id);
     }
 
     @Override
     public List<Author> searchAuthors(String query) {
         String lowerQuery = query.toLowerCase();
-        return authors.stream()
-                .filter(author -> author.getName().toLowerCase().contains(lowerQuery) ||
-                        (author.getBiography() != null && author.getBiography().toLowerCase().contains(lowerQuery)) ||
-                        (author.getNationality() != null && author.getNationality().toLowerCase().contains(lowerQuery)))
-                .collect(Collectors.toList());
+        List<Author> result = new ArrayList<>();
+        for (Author author : authors) {
+            String name = author.getName() != null ? author.getName().toLowerCase() : "";
+            String bio = author.getBiography() != null ? author.getBiography().toLowerCase() : "";
+            String nat = author.getNationality() != null ? author.getNationality().toLowerCase() : "";
+            if (name.contains(lowerQuery) || bio.contains(lowerQuery) || nat.contains(lowerQuery)) {
+                result.add(author);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -56,7 +60,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author updateAuthor(long id, Author updatedAuthor) {
-        return getAuthorById(id).map(existingAuthor -> {
+        Author existingAuthor = getAuthorById(id);
+        if (existingAuthor != null) {
             // Update fields
             if (updatedAuthor.getName() != null) {
                 existingAuthor.setName(updatedAuthor.getName());
@@ -73,22 +78,29 @@ public class AuthorServiceImpl implements AuthorService {
             if (updatedAuthor.getNationality() != null) {
                 existingAuthor.setNationality(updatedAuthor.getNationality());
             }
-            
             saveToFile();
             return existingAuthor;
-        }).orElse(null);
+        }
+        return null;
     }
 
     @Override
     public boolean deleteAuthor(long id) {
-        return getAuthorById(id).map(author -> {
-            boolean removed = authors.remove(author);
-            if (removed) {
-                authorMap.remove(id);
-                saveToFile();
+        boolean removed = false;
+        Iterator<Author> it = authors.iterator();
+        while (it.hasNext()) {
+            Author a = it.next();
+            if (a.getId() == id) {
+                it.remove();
+                removed = true;
+                break;
             }
-            return removed;
-        }).orElse(false);
+        }
+        if (removed) {
+            authorMap.remove(id);
+            saveToFile();
+        }
+        return removed;
     }
 
     @Override

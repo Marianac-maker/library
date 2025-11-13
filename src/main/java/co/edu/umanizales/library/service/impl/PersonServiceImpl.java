@@ -26,10 +26,13 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Optional<Person> getPersonById(long id) {
-        return persons.stream()
-                .filter(person -> person.getId() == id)
-                .findFirst();
+    public Person getPersonById(long id) {
+        for (Person p : persons) {
+            if (p.getId() == id) {
+                return p;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -42,18 +45,27 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person updatePerson(long id, Person person) {
-        return getPersonById(id).map(existingPerson -> {
+        Person existingPerson = getPersonById(id);
+        if (existingPerson != null) {
             existingPerson.setName(person.getName());
             existingPerson.setEmail(person.getEmail());
             existingPerson.setPhoneNumber(person.getPhoneNumber());
             saveToFile();
             return existingPerson;
-        }).orElse(null);
+        }
+        return null;
     }
 
     @Override
     public boolean deletePerson(long id) {
-        boolean removed = persons.removeIf(person -> person.getId() == id);
+        boolean removed = false;
+        for (int i = 0; i < persons.size(); i++) {
+            if (persons.get(i).getId() == id) {
+                persons.remove(i);
+                removed = true;
+                break;
+            }
+        }
         if (removed) {
             saveToFile();
         }
