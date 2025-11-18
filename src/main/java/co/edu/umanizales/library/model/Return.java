@@ -15,5 +15,5 @@ public class Return {
     private BookCondition condition;
     private String notes;
     private double fineAmount;
-    private boolean finePaid;
-}
+    private boolean finePaid;}
+

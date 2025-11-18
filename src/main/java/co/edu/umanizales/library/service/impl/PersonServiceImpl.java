@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class PersonServiceImpl implements PersonService {
     private final List<Person> persons = new ArrayList<>();
     private final AtomicLong idCounter = new AtomicLong(1);
-    private static final String CSV_FILE = "persons.csv";
+    private static final String CSV_FILE = "data/persons.csv";
 
     public PersonServiceImpl() {
         loadFromFile();
@@ -37,6 +37,14 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person createPerson(Person person) {
+        // Validate required fields
+        if (person.getName() == null || person.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Name is required");
+        }
+        if (person.getEmail() == null || person.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+
         person.setId(idCounter.getAndIncrement());
         persons.add(person);
         saveToFile();

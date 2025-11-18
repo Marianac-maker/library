@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class FineRecordServiceImpl implements FineRecordService {
     private final List<FineRecord> fineRecords = new ArrayList<>();
     private final AtomicLong idCounter = new AtomicLong(1);
-    private static final String CSV_FILE = "fine_records.csv";
+    private static final String CSV_FILE = "data/fine_records.csv";
 
     private final UserService userService;
     private final LoanService loanService;
@@ -67,10 +67,17 @@ public class FineRecordServiceImpl implements FineRecordService {
 
     @Override
     public FineRecord createFineRecord(FineRecord fineRecord) {
-        // Validate references
+        // Validate required fields
         if (fineRecord.getUser() == null || fineRecord.getLoan() == null) {
             throw new IllegalArgumentException("FineRecord must have user and loan");
         }
+        if (fineRecord.getAmount() <= 0) {
+            throw new IllegalArgumentException("Fine amount must be greater than 0");
+        }
+        if (fineRecord.getReason() == null) {
+            throw new IllegalArgumentException("Fine reason is required");
+        }
+
         User uOpt = userService.getUserById(fineRecord.getUser().getId());
         if (uOpt == null) {
             throw new IllegalArgumentException("User not found");

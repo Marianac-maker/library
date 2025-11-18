@@ -44,6 +44,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) throws IOException {
+        // Validate required fields
+        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+            throw new IllegalArgumentException("Username is required");
+        }
+        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("Password is required");
+        }
+        if (user.getName() == null || user.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Name is required");
+        }
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+        if (user.getRole() == null) {
+            throw new IllegalArgumentException("Role is required");
+        }
+
         long maxId = 0;
         for (User u : users) {
             if (u.getId() > maxId) {

@@ -56,6 +56,20 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book createBook(Book book) {
+        // Validate required fields
+        if (book.getIsbn() == null || book.getIsbn().trim().isEmpty()) {
+            throw new IllegalArgumentException("ISBN is required");
+        }
+        if (book.getTitle() == null || book.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("Title is required");
+        }
+        if (book.getTotalCopies() <= 0) {
+            throw new IllegalArgumentException("Total copies must be greater than 0");
+        }
+        if (book.getAvailableCopies() < 0) {
+            throw new IllegalArgumentException("Available copies cannot be negative");
+        }
+
         // Validate ISBN uniqueness
         if (bookMap.containsKey(book.getIsbn())) {
             throw new IllegalArgumentException("A book with this ISBN already exists");

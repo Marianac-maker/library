@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class LoanServiceImpl implements LoanService {
     private final List<Loan> loans = new ArrayList<>();
     private final AtomicLong idCounter = new AtomicLong(1);
-    private static final String CSV_FILE = "loans.csv";
+    private static final String CSV_FILE = "data/loans.csv";
 
     // Dependencies for related services (to be autowired)
     private final BookService bookService;
@@ -42,6 +42,17 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public Loan createLoan(Loan loan) {
+        // Validate required fields
+        if (loan.getUser() == null) {
+            throw new IllegalArgumentException("User is required");
+        }
+        if (loan.getBook() == null) {
+            throw new IllegalArgumentException("Book is required");
+        }
+        if (loan.getBook().getIsbn() == null || loan.getBook().getIsbn().trim().isEmpty()) {
+            throw new IllegalArgumentException("Book ISBN is required");
+        }
+
         // Validate book exists and has available copies
         Book book = bookService.getBookByIsbn(loan.getBook().getIsbn());
         if (book == null) {

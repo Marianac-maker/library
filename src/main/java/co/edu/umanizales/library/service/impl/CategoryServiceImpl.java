@@ -13,7 +13,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final List<Category> categories = new ArrayList<>();
     private final Map<String, Category> nameIndex = new HashMap<>();
     private final AtomicLong idCounter = new AtomicLong(1);
-    private static final String CSV_FILE = "categories.csv";
+    private static final String CSV_FILE = "data/categories.csv";
 
     public CategoryServiceImpl() {
         loadFromFile();
@@ -41,6 +41,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category createCategory(Category category) {
+        // Validate required fields
+        if (category.getName() == null || category.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Category name is required");
+        }
+
         // Validate name uniqueness
         if (nameIndex.containsKey(category.getName().toLowerCase())) {
             throw new IllegalArgumentException("Category with this name already exists");

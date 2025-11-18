@@ -13,7 +13,7 @@ public class AuthorServiceImpl implements AuthorService {
     private final List<Author> authors = new ArrayList<>();
     private final Map<Long, Author> authorMap = new HashMap<>();
     private final AtomicLong idCounter = new AtomicLong(1);
-    private static final String CSV_FILE = "authors.csv";
+    private static final String CSV_FILE = "data/authors.csv";
 
     public AuthorServiceImpl() {
         loadFromFile();
@@ -46,6 +46,17 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author createAuthor(Author author) {
+        // Validate required fields
+        if (author.getName() == null || author.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Author name is required");
+        }
+        if (author.getEmail() == null || author.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("Author email is required");
+        }
+        if (author.getNationality() == null || author.getNationality().trim().isEmpty()) {
+            throw new IllegalArgumentException("Author nationality is required");
+        }
+
         // Set ID and creation timestamp
         long newId = idCounter.getAndIncrement();
         author.setId(newId);
