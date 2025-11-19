@@ -15,9 +15,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/books",
+              "raw": "{{baseUrl}}/api/v1/books",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "books"]
+              "path": ["api", "v1", "books"]
             }
           }
         },
@@ -26,9 +26,9 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/books/:isbn",
+              "raw": "{{baseUrl}}/api/v1/books/:isbn",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "books", ":isbn"],
+              "path": ["api", "v1", "books", ":isbn"],
               "variable": [{"key": "isbn", "value": "1234567890"}]
             }
           }
@@ -38,9 +38,9 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/books/search?query={{query}}",
+              "raw": "{{baseUrl}}/api/v1/books/search?query={{query}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "books", "search"],
+              "path": ["api", "v1", "books", "search"],
               "query": [{"key": "query", "value": "harry"}]
             }
           }
@@ -52,12 +52,12 @@
             "header": [{"key": "Content-Type", "value": "application/json"}],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"isbn\": \"1234567890\",\n  \"title\": \"Sample Book\",\n  \"authorId\": 1,\n  \"publisherId\": 1,\n  \"categoryId\": 1,\n  \"availableCopies\": 5\n}"
+              "raw": "{\n  \"isbn\": \"1234567890\",\n  \"title\": \"Harry Potter and the Philosopher's Stone\",\n  \"authors\": [\n    {\n      \"id\": 1,\n      \"name\": \"J.K. Rowling\",\n      \"email\": \"author@example.com\",\n      \"phoneNumber\": \"3001234567\",\n      \"biography\": \"British author\",\n      \"nationality\": \"British\"\n    }\n  ],\n  \"publisher\": {\n    \"id\": 1,\n    \"name\": \"Bloomsbury Publishing\",\n    \"address\": \"London, UK\",\n    \"phoneNumber\": \"1234567890\",\n    \"email\": \"publisher@example.com\"\n  },\n  \"publicationYear\": 1997,\n  \"edition\": 1,\n  \"category\": {\n    \"id\": 1,\n    \"name\": \"Fantasy\",\n    \"description\": \"Fantasy novels\"\n  },\n  \"availableCopies\": 5,\n  \"totalCopies\": 10,\n  \"location\": \"Shelf A1\",\n  \"description\": \"A young wizard discovers his magical heritage\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/books",
+              "raw": "{{baseUrl}}/api/v1/books",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "books"]
+              "path": ["api", "v1", "books"]
             }
           }
         },
@@ -68,9 +68,9 @@
             "header": [{"key": "Content-Type", "value": "application/json"}],
             "body": {"mode": "raw", "raw": "{\n  \"title\": \"Updated Title\"\n}"},
             "url": {
-              "raw": "{{baseUrl}}/api/books/:isbn",
+              "raw": "{{baseUrl}}/api/v1/books/:isbn",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "books", ":isbn"],
+              "path": ["api", "v1", "books", ":isbn"],
               "variable": [{"key": "isbn", "value": "1234567890"}]
             }
           }
@@ -80,9 +80,9 @@
           "request": {
             "method": "DELETE",
             "url": {
-              "raw": "{{baseUrl}}/api/books/:isbn",
+              "raw": "{{baseUrl}}/api/v1/books/:isbn",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "books", ":isbn"],
+              "path": ["api", "v1", "books", ":isbn"],
               "variable": [{"key": "isbn", "value": "1234567890"}]
             }
           }
@@ -92,9 +92,9 @@
           "request": {
             "method": "POST",
             "url": {
-              "raw": "{{baseUrl}}/api/books/:isbn/copies/increase?count=1",
+              "raw": "{{baseUrl}}/api/v1/books/:isbn/copies/increase?count=1",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "books", ":isbn", "copies", "increase"],
+              "path": ["api", "v1", "books", ":isbn", "copies", "increase"],
               "query": [{"key": "count", "value": "1"}],
               "variable": [{"key": "isbn", "value": "1234567890"}]
             }
@@ -105,9 +105,9 @@
           "request": {
             "method": "POST",
             "url": {
-              "raw": "{{baseUrl}}/api/books/:isbn/copies/decrease?count=1",
+              "raw": "{{baseUrl}}/api/v1/books/:isbn/copies/decrease?count=1",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "books", ":isbn", "copies", "decrease"],
+              "path": ["api", "v1", "books", ":isbn", "copies", "decrease"],
               "query": [{"key": "count", "value": "1"}],
               "variable": [{"key": "isbn", "value": "1234567890"}]
             }
@@ -118,9 +118,9 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/books/author/:authorId",
+              "raw": "{{baseUrl}}/api/v1/books/author/:authorId",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "books", "author", ":authorId"],
+              "path": ["api", "v1", "books", "author", ":authorId"],
               "variable": [{"key": "authorId", "value": "1"}]
             }
           }
@@ -130,9 +130,9 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/books/publisher/:publisherId",
+              "raw": "{{baseUrl}}/api/v1/books/publisher/:publisherId",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "books", "publisher", ":publisherId"],
+              "path": ["api", "v1", "books", "publisher", ":publisherId"],
               "variable": [{"key": "publisherId", "value": "1"}]
             }
           }
@@ -142,9 +142,9 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/books/category/:categoryId",
+              "raw": "{{baseUrl}}/api/v1/books/category/:categoryId",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "books", "category", ":categoryId"],
+              "path": ["api", "v1", "books", "category", ":categoryId"],
               "variable": [{"key": "categoryId", "value": "1"}]
             }
           }
@@ -154,36 +154,36 @@
     {
       "name": "Authors",
       "item": [
-        {"name": "Get all authors", "request": {"method": "GET", "url": {"raw": "{{baseUrl}}/api/authors", "host": ["{{baseUrl}}"], "path": ["api","authors"]}}},
-        {"name": "Get author by id", "request": {"method": "GET", "url": {"raw": "{{baseUrl}}/api/authors/:id", "host": ["{{baseUrl}}"], "path": ["api","authors",":id"], "variable": [{"key":"id","value":"1"}]}}},
-        {"name": "Search authors", "request": {"method": "GET", "url": {"raw": "{{baseUrl}}/api/authors/search?query={{query}}", "host": ["{{baseUrl}}"], "path": ["api","authors","search"], "query": [{"key":"query","value":"rowling"}]}}},
-        {"name": "Create author", "request": {"method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"Author Name\"\n}"}, "url": {"raw": "{{baseUrl}}/api/authors", "host": ["{{baseUrl}}"], "path": ["api","authors"]}}},
-        {"name": "Update author", "request": {"method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"Updated Author\"\n}"}, "url": {"raw": "{{baseUrl}}/api/authors/:id", "host": ["{{baseUrl}}"], "path": ["api","authors",":id"], "variable": [{"key":"id","value":"1"}]}}},
-        {"name": "Delete author", "request": {"method": "DELETE", "url": {"raw": "{{baseUrl}}/api/authors/:id", "host": ["{{baseUrl}}"], "path": ["api","authors",":id"], "variable": [{"key":"id","value":"1"}]}}}
+        {"name": "Get all authors", "request": {"method": "GET", "url": {"raw": "{{baseUrl}}/api/v1/authors", "host": ["{{baseUrl}}"], "path": ["api","v1","authors"]}}},
+        {"name": "Get author by id", "request": {"method": "GET", "url": {"raw": "{{baseUrl}}/api/v1/authors/:id", "host": ["{{baseUrl}}"], "path": ["api","v1","authors",":id"], "variable": [{"key":"id","value":"1"}]}}},
+        {"name": "Search authors", "request": {"method": "GET", "url": {"raw": "{{baseUrl}}/api/v1/authors/search?query={{query}}", "host": ["{{baseUrl}}"], "path": ["api","v1","authors","search"], "query": [{"key":"query","value":"rowling"}]}}},
+        {"name": "Create author", "request": {"method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"J.K. Rowling\",\n  \"email\": \"author@example.com\",\n  \"phoneNumber\": \"3001234567\",\n  \"biography\": \"British author known for Harry Potter series\",\n  \"nationality\": \"British\"\n}"}, "url": {"raw": "{{baseUrl}}/api/v1/authors", "host": ["{{baseUrl}}"], "path": ["api","v1","authors"]}}},
+        {"name": "Update author", "request": {"method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"Updated Author\",\n  \"email\": \"updated@example.com\",\n  \"biography\": \"Updated biography\",\n  \"nationality\": \"British\"\n}"}, "url": {"raw": "{{baseUrl}}/api/v1/authors/:id", "host": ["{{baseUrl}}"], "path": ["api","v1","authors",":id"], "variable": [{"key":"id","value":"1"}]}}},
+        {"name": "Delete author", "request": {"method": "DELETE", "url": {"raw": "{{baseUrl}}/api/v1/authors/:id", "host": ["{{baseUrl}}"], "path": ["api","v1","authors",":id"], "variable": [{"key":"id","value":"1"}]}}}
       ]
     },
     {
       "name": "Categories",
       "item": [
-        {"name": "Get all categories", "request": {"method":"GET", "url": {"raw":"{{baseUrl}}/api/categories", "host":["{{baseUrl}}"], "path":["api","categories"]}}},
-        {"name": "Get category by id", "request": {"method":"GET", "url": {"raw":"{{baseUrl}}/api/categories/:id", "host":["{{baseUrl}}"], "path":["api","categories",":id"], "variable":[{"key":"id","value":"1"}]}}},
-        {"name": "Get category by name", "request": {"method":"GET", "url": {"raw":"{{baseUrl}}/api/categories/name/:name", "host":["{{baseUrl}}"], "path":["api","categories","name",":name"], "variable":[{"key":"name","value":"Fiction"}]}}},
-        {"name": "Create category", "request": {"method":"POST", "header":[{"key":"Content-Type","value":"application/json"}], "body":{"mode":"raw","raw":"{\n  \"name\": \"New Category\"\n}"}, "url": {"raw":"{{baseUrl}}/api/categories", "host":["{{baseUrl}}"], "path":["api","categories"]}}},
-        {"name": "Update category", "request": {"method":"PUT", "header":[{"key":"Content-Type","value":"application/json"}], "body":{"mode":"raw","raw":"{\n  \"name\": \"Updated Category\"\n}"}, "url": {"raw":"{{baseUrl}}/api/categories/:id", "host":["{{baseUrl}}"], "path":["api","categories",":id"], "variable":[{"key":"id","value":"1"}]}}},
-        {"name": "Delete category", "request": {"method":"DELETE", "url": {"raw":"{{baseUrl}}/api/categories/:id", "host":["{{baseUrl}}"], "path":["api","categories",":id"], "variable":[{"key":"id","value":"1"}]}}}
+        {"name": "Get all categories", "request": {"method":"GET", "url": {"raw":"{{baseUrl}}/api/v1/categories", "host":["{{baseUrl}}"], "path":["api","v1","categories"]}}},
+        {"name": "Get category by id", "request": {"method":"GET", "url": {"raw":"{{baseUrl}}/api/v1/categories/:id", "host":["{{baseUrl}}"], "path":["api","v1","categories",":id"], "variable":[{"key":"id","value":"1"}]}}},
+        {"name": "Get category by name", "request": {"method":"GET", "url": {"raw":"{{baseUrl}}/api/v1/categories/name/:name", "host":["{{baseUrl}}"], "path":["api","v1","categories","name",":name"], "variable":[{"key":"name","value":"Fiction"}]}}},
+        {"name": "Create category", "request": {"method":"POST", "header":[{"key":"Content-Type","value":"application/json"}], "body":{"mode":"raw","raw":"{\n  \"name\": \"New Category\"\n}"}, "url": {"raw":"{{baseUrl}}/api/v1/categories", "host":["{{baseUrl}}"], "path":["api","v1","categories"]}}},
+        {"name": "Update category", "request": {"method":"PUT", "header":[{"key":"Content-Type","value":"application/json"}], "body":{"mode":"raw","raw":"{\n  \"name\": \"Updated Category\"\n}"}, "url": {"raw":"{{baseUrl}}/api/v1/categories/:id", "host":["{{baseUrl}}"], "path":["api","v1","categories",":id"], "variable":[{"key":"id","value":"1"}]}}},
+        {"name": "Delete category", "request": {"method":"DELETE", "url": {"raw":"{{baseUrl}}/api/v1/categories/:id", "host":["{{baseUrl}}"], "path":["api","v1","categories",":id"], "variable":[{"key":"id","value":"1"}]}}}
       ]
     },
     {
       "name": "Loans",
       "item": [
-        {"name":"Get all loans","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/loans","host":["{{baseUrl}}"],"path":["api","loans"]}}},
-        {"name":"Get loan by id","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/loans/:id","host":["{{baseUrl}}"],"path":["api","loans",":id"],"variable":[{"key":"id","value":"1"}]}}},
-        {"name":"Create loan","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"userId\": 1,\n  \"bookId\": \"1234567890\",\n  \"loanDate\": \"2024-01-01\",\n  \"dueDate\": \"2024-01-15\"\n}"},"url":{"raw":"{{baseUrl}}/api/loans","host":["{{baseUrl}}"],"path":["api","loans"]}}},
-        {"name":"Update loan","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"dueDate\": \"2024-01-20\"\n}"},"url":{"raw":"{{baseUrl}}/api/loans/:id","host":["{{baseUrl}}"],"path":["api","loans",":id"],"variable":[{"key":"id","value":"1"}]}}},
-        {"name":"Delete loan","request":{"method":"DELETE","url":{"raw":"{{baseUrl}}/api/loans/:id","host":["{{baseUrl}}"],"path":["api","loans",":id"],"variable":[{"key":"id","value":"1"}]}}},
-        {"name":"Return loan","request":{"method":"POST","url":{"raw":"{{baseUrl}}/api/loans/:id/return","host":["{{baseUrl}}"],"path":["api","loans",":id","return"],"variable":[{"key":"id","value":"1"}]}}},
-        {"name":"Loans by user","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/loans/user/:userId","host":["{{baseUrl}}"],"path":["api","loans","user",":userId"],"variable":[{"key":"userId","value":"1"}]}}},
-        {"name":"Loans by book","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/loans/book/:bookId","host":["{{baseUrl}}"],"path":["api","loans","book",":bookId"],"variable":[{"key":"bookId","value":"1234567890"}]}}}
+        {"name":"Get all loans","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/loans","host":["{{baseUrl}}"],"path":["api","v1","loans"]}}},
+        {"name":"Get loan by id","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/loans/:id","host":["{{baseUrl}}"],"path":["api","v1","loans",":id"],"variable":[{"key":"id","value":"1"}]}}},
+        {"name":"Create loan","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"user\": {\n    \"id\": 1\n  },\n  \"book\": {\n    \"isbn\": \"1234567890\"\n  },\n  \"loanDate\": \"2024-01-01\",\n  \"dueDate\": \"2024-01-15\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/loans","host":["{{baseUrl}}"],"path":["api","v1","loans"]}}},
+        {"name":"Update loan","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"dueDate\": \"2024-01-20\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/loans/:id","host":["{{baseUrl}}"],"path":["api","v1","loans",":id"],"variable":[{"key":"id","value":"1"}]}}},
+        {"name":"Delete loan","request":{"method":"DELETE","url":{"raw":"{{baseUrl}}/api/v1/loans/:id","host":["{{baseUrl}}"],"path":["api","v1","loans",":id"],"variable":[{"key":"id","value":"1"}]}}},
+        {"name":"Return loan","request":{"method":"POST","url":{"raw":"{{baseUrl}}/api/v1/loans/:id/return","host":["{{baseUrl}}"],"path":["api","v1","loans",":id","return"],"variable":[{"key":"id","value":"1"}]}}},
+        {"name":"Loans by user","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/loans/user/:userId","host":["{{baseUrl}}"],"path":["api","v1","loans","user",":userId"],"variable":[{"key":"userId","value":"1"}]}}},
+        {"name":"Loans by book","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/loans/book/:isbn","host":["{{baseUrl}}"],"path":["api","v1","loans","book",":isbn"],"variable":[{"key":"isbn","value":"1234567890"}]}}}
       ]
     },
     {
@@ -191,8 +191,8 @@
       "item": [
         {"name":"Get all returns","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/returns","host":["{{baseUrl}}"],"path":["api","v1","returns"]}}},
         {"name":"Get return by id","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/returns/:id","host":["{{baseUrl}}"],"path":["api","v1","returns",":id"],"variable":[{"key":"id","value":"1"}]}}},
-        {"name":"Create return","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"loanId\": 1,\n  \"returnDate\": \"2024-01-10\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/returns","host":["{{baseUrl}}"],"path":["api","v1","returns"]}}},
-        {"name":"Update return","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"returnDate\": \"2024-01-12\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/returns/:id","host":["{{baseUrl}}"],"path":["api","v1","returns",":id"],"variable":[{"key":"id","value":"1"}]}}},
+        {"name":"Create return","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"loan\": {\n    \"id\": 1\n  },\n  \"returnDate\": \"2024-01-10T10:30:00\",\n  \"condition\": \"GOOD\",\n  \"notes\": \"Book in good condition\",\n  \"fineAmount\": 0.0,\n  \"finePaid\": false\n}"},"url":{"raw":"{{baseUrl}}/api/v1/returns","host":["{{baseUrl}}"],"path":["api","v1","returns"]}}},
+        {"name":"Update return","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"condition\": \"DAMAGED\",\n  \"fineAmount\": 5.0\n}"},"url":{"raw":"{{baseUrl}}/api/v1/returns/:id","host":["{{baseUrl}}"],"path":["api","v1","returns",":id"],"variable":[{"key":"id","value":"1"}]}}},
         {"name":"Delete return","request":{"method":"DELETE","url":{"raw":"{{baseUrl}}/api/v1/returns/:id","host":["{{baseUrl}}"],"path":["api","v1","returns",":id"],"variable":[{"key":"id","value":"1"}]}}}
       ]
     },
@@ -201,8 +201,8 @@
       "item": [
         {"name":"Get all users","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/users","host":["{{baseUrl}}"],"path":["api","v1","users"]}}},
         {"name":"Get user by id","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/users/:id","host":["{{baseUrl}}"],"path":["api","v1","users",":id"],"variable":[{"key":"id","value":"1"}]}}},
-        {"name":"Create user","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"username\": \"jdoe\",\n  \"email\": \"jdoe@example.com\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/users","host":["{{baseUrl}}"],"path":["api","v1","users"]}}},
-        {"name":"Update user","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"email\": \"johndoe@example.com\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/users/:id","host":["{{baseUrl}}"],"path":["api","v1","users",":id"],"variable":[{"key":"id","value":"1"}]}}},
+        {"name":"Create user","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"name\": \"John Doe\",\n  \"email\": \"jdoe@example.com\",\n  \"phoneNumber\": \"3001234567\",\n  \"username\": \"jdoe\",\n  \"password\": \"password123\",\n  \"role\": \"MEMBER\",\n  \"active\": true\n}"},"url":{"raw":"{{baseUrl}}/api/v1/users","host":["{{baseUrl}}"],"path":["api","v1","users"]}}},
+        {"name":"Update user","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"email\": \"johndoe@example.com\",\n  \"role\": \"LIBRARIAN\",\n  \"active\": true\n}"},"url":{"raw":"{{baseUrl}}/api/v1/users/:id","host":["{{baseUrl}}"],"path":["api","v1","users",":id"],"variable":[{"key":"id","value":"1"}]}}},
         {"name":"Delete user","request":{"method":"DELETE","url":{"raw":"{{baseUrl}}/api/v1/users/:id","host":["{{baseUrl}}"],"path":["api","v1","users",":id"],"variable":[{"key":"id","value":"1"}]}}},
         {"name":"Users by role","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/users/role/:role","host":["{{baseUrl}}"],"path":["api","v1","users","role",":role"],"variable":[{"key":"role","value":"ADMIN"}]}}},
         {"name":"Active users","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/users/status/active","host":["{{baseUrl}}"],"path":["api","v1","users","status","active"]}}}
@@ -211,11 +211,11 @@
     {
       "name": "Persons",
       "item": [
-        {"name": "Get all persons", "request": {"method": "GET", "url": {"raw": "{{baseUrl}}/api/persons", "host": ["{{baseUrl}}"], "path": ["api","persons"]}}},
-        {"name": "Get person by id", "request": {"method": "GET", "url": {"raw": "{{baseUrl}}/api/persons/:id", "host": ["{{baseUrl}}"], "path": ["api","persons",":id"], "variable": [{"key": "id", "value": "1"}]}}},
-        {"name": "Create person", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\n  \"name\": \"John Doe\"\n}"}, "url": {"raw": "{{baseUrl}}/api/persons", "host": ["{{baseUrl}}"], "path": ["api","persons"]}}},
-        {"name": "Update person", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\n  \"name\": \"Updated Name\"\n}"}, "url": {"raw": "{{baseUrl}}/api/persons/:id", "host": ["{{baseUrl}}"], "path": ["api","persons",":id"], "variable": [{"key": "id", "value": "1"}]}}},
-        {"name": "Delete person", "request": {"method": "DELETE", "url": {"raw": "{{baseUrl}}/api/persons/:id", "host": ["{{baseUrl}}"], "path": ["api","persons",":id"], "variable": [{"key": "id", "value": "1"}]}}}
+        {"name": "Get all persons", "request": {"method": "GET", "url": {"raw": "{{baseUrl}}/api/v1/persons", "host": ["{{baseUrl}}"], "path": ["api", "v1", "persons"]}}},
+        {"name": "Get person by id", "request": {"method": "GET", "url": {"raw": "{{baseUrl}}/api/v1/persons/:id", "host": ["{{baseUrl}}"], "path": ["api", "v1", "persons", ":id"], "variable": [{"key": "id", "value": "1"}]}}},
+        {"name": "Create person", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"phoneNumber\": \"3001234567\"\n}"}, "url": {"raw": "{{baseUrl}}/api/v1/persons", "host": ["{{baseUrl}}"], "path": ["api", "v1", "persons"]}}},
+        {"name": "Update person", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\n  \"name\": \"Updated Name\",\n  \"email\": \"updated@example.com\"\n}"}, "url": {"raw": "{{baseUrl}}/api/v1/persons/:id", "host": ["{{baseUrl}}"], "path": ["api", "v1", "persons", ":id"], "variable": [{"key": "id", "value": "1"}]}}},
+        {"name": "Delete person", "request": {"method": "DELETE", "url": {"raw": "{{baseUrl}}/api/v1/persons/:id", "host": ["{{baseUrl}}"], "path": ["api", "v1", "persons", ":id"], "variable": [{"key": "id", "value": "1"}]}}}
       ]
     },
     {
@@ -223,23 +223,23 @@
       "item": [
         {"name":"Get all publishers","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/publishers","host":["{{baseUrl}}"],"path":["api","v1","publishers"]}}},
         {"name":"Get publisher by id","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/publishers/:id","host":["{{baseUrl}}"],"path":["api","v1","publishers",":id"],"variable":[{"key":"id","value":"1"}]}}},
-        {"name":"Create publisher","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"name\": \"Publisher Name\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/publishers","host":["{{baseUrl}}"],"path":["api","v1","publishers"]}}},
-        {"name":"Update publisher","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"name\": \"Updated Publisher\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/publishers/:id","host":["{{baseUrl}}"],"path":["api","v1","publishers",":id"],"variable":[{"key":"id","value":"1"}]}}},
+        {"name":"Create publisher","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"name\": \"Bloomsbury Publishing\",\n  \"address\": \"London, UK\",\n  \"phoneNumber\": \"1234567890\",\n  \"email\": \"publisher@example.com\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/publishers","host":["{{baseUrl}}"],"path":["api","v1","publishers"]}}},
+        {"name":"Update publisher","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"name\": \"Updated Publisher\",\n  \"address\": \"New York, USA\",\n  \"phoneNumber\": \"9876543210\",\n  \"email\": \"updated@example.com\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/publishers/:id","host":["{{baseUrl}}"],"path":["api","v1","publishers",":id"],"variable":[{"key":"id","value":"1"}]}}},
         {"name":"Delete publisher","request":{"method":"DELETE","url":{"raw":"{{baseUrl}}/api/v1/publishers/:id","host":["{{baseUrl}}"],"path":["api","v1","publishers",":id"],"variable":[{"key":"id","value":"1"}]}}}
       ]
     },
     {
       "name": "Fine Records",
       "item": [
-        {"name":"Get all fine records","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/fine-records","host":["{{baseUrl}}"],"path":["api","fine-records"]}}},
-        {"name":"Get fine record by id","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/fine-records/:id","host":["{{baseUrl}}"],"path":["api","fine-records",":id"],"variable":[{"key":"id","value":"1"}]}}},
-        {"name":"Fine records by user","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/fine-records/user/:userId","host":["{{baseUrl}}"],"path":["api","fine-records","user",":userId"],"variable":[{"key":"userId","value":"1"}]}}},
-        {"name":"Unpaid fine records by user","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/fine-records/user/:userId/unpaid","host":["{{baseUrl}}"],"path":["api","fine-records","user",":userId","unpaid"],"variable":[{"key":"userId","value":"1"}]}}},
-        {"name":"Total unpaid by user","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/fine-records/user/:userId/total","host":["{{baseUrl}}"],"path":["api","fine-records","user",":userId","total"],"variable":[{"key":"userId","value":"1"}]}}},
-        {"name":"Create fine record","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"userId\": 1,\n  \"amount\": 10.0,\n  \"reason\": \"Late return\"\n}"},"url":{"raw":"{{baseUrl}}/api/fine-records","host":["{{baseUrl}}"],"path":["api","fine-records"]}}},
-        {"name":"Update fine record","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"amount\": 12.5\n}"},"url":{"raw":"{{baseUrl}}/api/fine-records/:id","host":["{{baseUrl}}"],"path":["api","fine-records",":id"],"variable":[{"key":"id","value":"1"}]}}},
-        {"name":"Mark as paid","request":{"method":"POST","url":{"raw":"{{baseUrl}}/api/fine-records/:id/pay","host":["{{baseUrl}}"],"path":["api","fine-records",":id","pay"],"variable":[{"key":"id","value":"1"}]}}},
-        {"name":"Delete fine record","request":{"method":"DELETE","url":{"raw":"{{baseUrl}}/api/fine-records/:id","host":["{{baseUrl}}"],"path":["api","fine-records",":id"],"variable":[{"key":"id","value":"1"}]}}}
+        {"name":"Get all fine records","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/fine-records","host":["{{baseUrl}}"],"path":["api","v1","fine-records"]}}},
+        {"name":"Get fine record by id","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/fine-records/:id","host":["{{baseUrl}}"],"path":["api","v1","fine-records",":id"],"variable":[{"key":"id","value":"1"}]}}},
+        {"name":"Fine records by user","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/fine-records/user/:userId","host":["{{baseUrl}}"],"path":["api","v1","fine-records","user",":userId"],"variable":[{"key":"userId","value":"1"}]}}},
+        {"name":"Unpaid fine records by user","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/fine-records/user/:userId/unpaid","host":["{{baseUrl}}"],"path":["api","v1","fine-records","user",":userId","unpaid"],"variable":[{"key":"userId","value":"1"}]}}},
+        {"name":"Total unpaid by user","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/fine-records/user/:userId/total","host":["{{baseUrl}}"],"path":["api","v1","fine-records","user",":userId","total"],"variable":[{"key":"userId","value":"1"}]}}},
+        {"name":"Create fine record","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"user\": {\n    \"id\": 1\n  },\n  \"loan\": {\n    \"id\": 1\n  },\n  \"amount\": 10.0,\n  \"reason\": \"LATE_RETURN\",\n  \"issueDate\": \"2024-01-15\",\n  \"dueDate\": \"2024-01-20\",\n  \"paid\": false\n}"},"url":{"raw":"{{baseUrl}}/api/v1/fine-records","host":["{{baseUrl}}"],"path":["api","v1","fine-records"]}}},
+        {"name":"Update fine record","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"amount\": 12.5,\n  \"reason\": \"DAMAGE\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/fine-records/:id","host":["{{baseUrl}}"],"path":["api","v1","fine-records",":id"],"variable":[{"key":"id","value":"1"}]}}},
+        {"name":"Mark as paid","request":{"method":"POST","url":{"raw":"{{baseUrl}}/api/v1/fine-records/:id/pay","host":["{{baseUrl}}"],"path":["api","v1","fine-records",":id","pay"],"variable":[{"key":"id","value":"1"}]}}},
+        {"name":"Delete fine record","request":{"method":"DELETE","url":{"raw":"{{baseUrl}}/api/v1/fine-records/:id","host":["{{baseUrl}}"],"path":["api","v1","fine-records",":id"],"variable":[{"key":"id","value":"1"}]}}}
       ]
     },
     {
@@ -247,13 +247,13 @@
       "item": [
         {"name":"Get all reviews","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/reviews","host":["{{baseUrl}}"],"path":["api","v1","reviews"]}}},
         {"name":"Get review by id","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/reviews/:id","host":["{{baseUrl}}"],"path":["api","v1","reviews",":id"],"variable":[{"key":"id","value":"1"}]}}},
-        {"name":"Create review","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"userId\": 1,\n  \"bookId\": 1,\n  \"rating\": 5,\n  \"comment\": \"Great book!\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/reviews","host":["{{baseUrl}}"],"path":["api","v1","reviews"]}}},
-        {"name":"Update review","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"rating\": 4\n}"},"url":{"raw":"{{baseUrl}}/api/v1/reviews/:id","host":["{{baseUrl}}"],"path":["api","v1","reviews",":id"],"variable":[{"key":"id","value":"1"}]}}},
+        {"name":"Create review","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"user\": {\n    \"id\": 1\n  },\n  \"book\": {\n    \"isbn\": \"1234567890\"\n  },\n  \"rating\": 5,\n  \"comment\": \"Great book!\",\n  \"reviewDate\": \"2024-01-15\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/reviews","host":["{{baseUrl}}"],"path":["api","v1","reviews"]}}},
+        {"name":"Update review","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"rating\": 4,\n  \"comment\": \"Good book\"\n}"},"url":{"raw":"{{baseUrl}}/api/v1/reviews/:id","host":["{{baseUrl}}"],"path":["api","v1","reviews",":id"],"variable":[{"key":"id","value":"1"}]}}},
         {"name":"Delete review","request":{"method":"DELETE","url":{"raw":"{{baseUrl}}/api/v1/reviews/:id","host":["{{baseUrl}}"],"path":["api","v1","reviews",":id"],"variable":[{"key":"id","value":"1"}]}}},
         {"name":"Reviews by user","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/reviews/user/:userId","host":["{{baseUrl}}"],"path":["api","v1","reviews","user",":userId"],"variable":[{"key":"userId","value":"1"}]}}},
-        {"name":"Reviews by book","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/reviews/book/:bookId","host":["{{baseUrl}}"],"path":["api","v1","reviews","book",":bookId"],"variable":[{"key":"bookId","value":"1"}]}}},
+        {"name":"Reviews by book","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/reviews/book/:isbn","host":["{{baseUrl}}"],"path":["api","v1","reviews","book",":isbn"],"variable":[{"key":"isbn","value":"1234567890"}]}}},
         {"name":"Reviews by rating","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/reviews/rating/:rating","host":["{{baseUrl}}"],"path":["api","v1","reviews","rating",":rating"],"variable":[{"key":"rating","value":"5"}]}}},
-        {"name":"Average rating by book","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/reviews/book/:bookId/average-rating","host":["{{baseUrl}}"],"path":["api","v1","reviews","book",":bookId","average-rating"],"variable":[{"key":"bookId","value":"1"}]}}}
+        {"name":"Average rating by book","request":{"method":"GET","url":{"raw":"{{baseUrl}}/api/v1/reviews/book/:isbn/average-rating","host":["{{baseUrl}}"],"path":["api","v1","reviews","book",":isbn","average-rating"],"variable":[{"key":"isbn","value":"1234567890"}]}}}
       ]
     }
   ],

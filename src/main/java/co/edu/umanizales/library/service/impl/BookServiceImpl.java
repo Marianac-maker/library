@@ -13,7 +13,7 @@ import java.util.*;
 @Service
 public class BookServiceImpl implements BookService {
     private final Map<String, Book> bookMap = new HashMap<>();
-    private static final String CSV_FILE = "books.csv";
+    private static final String CSV_FILE = "data/books.csv";
 
     // Dependencies for related services
     private final AuthorService authorService;

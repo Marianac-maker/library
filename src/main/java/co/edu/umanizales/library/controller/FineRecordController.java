@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/fine-records")
+@RequestMapping("/api/v1/fine-records")
 public class FineRecordController {
 
     private final FineRecordService fineRecordService;
